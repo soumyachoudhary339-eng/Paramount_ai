@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Uploads & Temp Build
+uploads/
+dist/
+
+# OS / Editor Files
+.DS_Store
+.vscode/
