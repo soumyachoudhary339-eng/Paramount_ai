@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { MOCK_CAREER_OPTIONS } from '../../data/mockCareerData';
 import { useAuth } from '../../hooks/useAuth';
 
-export const RegisterPage = () => {
+ const RegisterPage = () => {
   const navigate = useNavigate();
   const { completeRegistration } = useAuth();
   
@@ -380,3 +380,5 @@ export const RegisterPage = () => {
     </div>
   );
 };
+
+export default RegisterPage

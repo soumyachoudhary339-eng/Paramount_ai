@@ -1,35 +1,120 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { LoginForm } from './components/LoginForm';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { loginUserApi } from '../../api/authService';
 
-export const LoginPage = () => {
+const LoginPage = () => {
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const data = await loginUserApi(formData);
+      if (data.success || data.token || data) {
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Invalid email or password.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gray-50">
-      <div className="md:w-1/2 bg-blue-600 text-white flex flex-col justify-center p-8 md:p-12">
-        <div className="max-w-md mx-auto space-y-4">
-          <span className="bg-blue-500 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
-            Viksit Bharat 2047 Initiative
+    <div className="min-h-screen flex w-full">
+      {/* Left Side: Branding & Visual Panel */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900 p-12 flex-col justify-between text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(168,85,247,0.15),_transparent_50%)]"></div>
+        
+        <div>
+          <span className="text-xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+            AI Career Platform
           </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold leading-tight">
-            AI-Powered Career Readiness & Employability Platform
+        </div>
+
+        <div className="my-auto max-w-lg z-10">
+          <h1 className="text-4xl font-extrabold tracking-tight mb-4 leading-tight">
+            Accelerate your career with AI-powered guidance.
           </h1>
-          <p className="text-blue-100">
-            Bridge campus learning to corporate readiness with custom AI roadmaps, instant ATS resume analysis, and dynamic skill tracking.
+          <p className="text-purple-200 text-base leading-relaxed">
+            Analyze your resume, track skill gaps, and follow customized step-by-step career roadmaps tailored specifically for your target role.
           </p>
+        </div>
+
+        <div className="text-xs text-purple-300 font-medium">
+          Better Skills → Bigger Opportunities
         </div>
       </div>
 
-      <div className="md:w-1/2 flex flex-col justify-center items-center p-6 md:p-12">
-        <div className="w-full max-w-md">
-          <LoginForm />
-          <p className="text-center text-sm text-gray-600 mt-6">
+      {/* Right Side: Login Form Panel */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+        <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 w-full max-w-md">
+          <div className="mb-6 text-center lg:text-left">
+            <h2 className="text-2xl font-bold text-gray-900">Welcome Back</h2>
+            <p className="text-sm text-gray-500 mt-1">Please enter your details to sign in.</p>
+          </div>
+          
+          {error && (
+            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-4 text-center border border-red-200">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all"
+                placeholder="you@example.com"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all"
+                placeholder="••••••••"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-lg transition-colors duration-200 disabled:opacity-50 cursor-pointer shadow-md shadow-purple-200"
+            >
+              {loading ? 'Authenticating...' : 'Sign In'}
+            </button>
+          </form>
+
+          <div className="text-center mt-6 text-sm text-gray-600">
             Don't have an account?{' '}
-            <Link to="/register" className="text-blue-600 font-semibold hover:underline">
-              Register & Set Career Goal
+            <Link to="/register" className="text-purple-600 font-semibold hover:underline">
+              Sign Up
             </Link>
-          </p>
+          </div>
         </div>
       </div>
     </div>
   );
 };
+
+export default LoginPage;

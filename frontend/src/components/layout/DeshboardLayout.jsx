@@ -1,55 +1,20 @@
 import React from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { Outlet } from 'react-router-dom';
+import { Sidebar } from './Sidebar';
+import { TopHeader } from './TopHeader';
 
-export const DashboardLayout = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
+const DashboardLayout = ({ user, careerGoal }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
-      {/* Top Navbar */}
-      <header className="bg-white border-b px-6 py-4 flex justify-between items-center sticky top-0 z-10">
-        <h1 className="text-xl font-bold text-blue-600">AI Career Platform</h1>
-        <div className="flex items-center space-x-4">
-          <span className="text-sm font-medium text-gray-700">{user?.name || 'Student'}</span>
-          <button
-            onClick={handleLogout}
-            className="text-sm text-red-600 border border-red-200 px-3 py-1 rounded hover:bg-red-50"
-          >
-            Logout
-          </button>
-        </div>
-      </header>
-
-      {/* Main Body */}
-      <div className="flex flex-1">
-        {/* Sidebar Navigation */}
-        <aside className="w-64 bg-white border-r min-h-[calc(100vh-65px)] p-4 space-y-2 hidden md:block">
-          <Link to="/dashboard" className="block p-3 rounded hover:bg-blue-50 text-gray-700 font-medium">
-            📊 Dashboard
-          </Link>
-          <Link to="/roadmap" className="block p-3 rounded hover:bg-blue-50 text-gray-700 font-medium">
-            🗺️ Career Roadmap
-          </Link>
-          <Link to="/resume-analyzer" className="block p-3 rounded hover:bg-blue-50 text-gray-700 font-medium">
-            🔍 Resume Analyzer
-          </Link>
-          <Link to="/resume-maker" className="block p-3 rounded hover:bg-blue-50 text-gray-700 font-medium">
-            📝 Resume Builder
-          </Link>
-        </aside>
-
-        {/* Dynamic Page Content */}
-        <main className="flex-1 p-6">
-          <Outlet />
+    <div className="flex min-h-screen bg-slate-50">
+      <Sidebar degree={careerGoal?.degree} />
+      <div className="flex-1 flex flex-col min-w-0">
+        <TopHeader user={user} activeRole={careerGoal?.targetRole} />
+        <main className="flex-1 p-6 overflow-y-auto">
+          <Outlet /> {/* 👈 Yahan inner page load hona zaroori hai */}
         </main>
       </div>
     </div>
   );
 };
+
+export default DashboardLayout

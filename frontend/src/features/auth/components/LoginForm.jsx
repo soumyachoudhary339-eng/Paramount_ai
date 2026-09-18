@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 
 export const LoginForm = () => {
@@ -7,7 +7,7 @@ export const LoginForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleLogin({ name: 'Rahul Sharma', email: credentials.email });
+    handleLogin({ name: 'Name', email: credentials.email });
   };
 
   return (
