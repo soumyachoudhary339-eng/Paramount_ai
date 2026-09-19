@@ -7,7 +7,7 @@ const pdfParseModule = createRequire(import.meta.url)("pdf-parse");
 const pdfParse = pdfParseModule.default || pdfParseModule;
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import resumeModel from "../models/resume.model.js";
+import resumeModel from "../models/resumeModel.js";
 import RoadmapModel from "../models/roadmap.model.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);

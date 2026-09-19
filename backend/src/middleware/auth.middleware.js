@@ -5,7 +5,6 @@ import userModel from "../models/user.model.js";
 export const authMiddleware = async(req,res,next)=>{
     try {
         let token = req.cookies.accessToken;
-
         if(!token)return res.status(404).json({
             success:false,
             message:"token not found"

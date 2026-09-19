@@ -1,12 +1,16 @@
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux'; // 👈 Step 1: Dispatch import karein
 import { loginUserApi } from '../../api/authService';
+import { loginUser } from '../auth/authSlice'; // 👈 Step 2: Redux action import karein
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // 👈 Step 3: Hook initialize karein
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,9 +23,19 @@ const LoginPage = () => {
 
     try {
       const data = await loginUserApi(formData);
-      if (data.success || data.token || data) {
-        navigate('/dashboard');
+      console.log("Backend Response:", data); 
+      // Token ko safely extract karke localStorage mein save karein
+      const token = data.token || data.accessToken;
+      if (token) {
+        localStorage.setItem('token', token);
       }
+
+      // Poora 'data' object dispatch karein taaki user aur token dono Redux mein set ho jayein
+      dispatch(loginUser(data));
+
+      // Dashboard par redirect karein
+      navigate('/dashboard', { replace: true });
+
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid email or password.');
     } finally {

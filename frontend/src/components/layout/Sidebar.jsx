@@ -60,25 +60,29 @@ export const Sidebar = ({ degree }) => {
           className="flex items-center gap-2.5 px-2 py-3 mb-6 border-b transition-opacity hover:opacity-80"
           style={{ borderColor: '#EEEFF7' }}
         >
+          {/* Logo Container */}
           <div
-            className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-sm shrink-0"
-            style={{ background: 'linear-gradient(135deg, #4F46E5, #7C6EF6)', boxShadow: '0 2px 8px rgba(79,70,229,0.25)' }}
+            className="w-10  rounded-xl overflow-hidden shrink-0 flex items-center justify-center"
+            style={{ boxShadow: '0 2px 8px rgba(79,70,229,0.25)' }}
           >
-            CF
+            <img
+              src="/paramount_ai_logo.png"
+              alt="Paramount AI Logo"
+              className="w-full h-full object-cover"
+            />
           </div>
+
           <span className="font-bold text-sm tracking-tight" style={{ color: '#1B1F3B' }}>
-            AI Career Platform
+            career read
           </span>
         </Link>
-
         <nav className="space-y-1">
           {navItems.map(({ label, path, Icon }) => (
             <NavLink
               key={path}
               to={path}
               className={({ isActive }) =>
-                `relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-                  isActive ? 'font-semibold' : ''
+                `relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors ${isActive ? 'font-semibold' : ''
                 }`
               }
               style={({ isActive }) => ({

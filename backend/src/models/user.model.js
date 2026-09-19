@@ -25,9 +25,30 @@ const userSchema = new mongoose.Schema(
       enum: ["candidate", "recruiter", "admin"],
       default: "candidate",
     },
+    // 👇 Career & Qualification Fields added from your UI
+    degree: {
+      type: String,
+      default: "B.Tech CSE / IT",
+    },
     targetRole: {
       type: String,
       default: "Full-Stack Developer",
+    },
+    careerGoalDescription: {
+      type: String,
+      default: "",
+    },
+    currentExperience: {
+      type: String,
+      default: "Beginner",
+    },
+    targetIndustry: {
+      type: String,
+      default: "Software & IT",
+    },
+    currentSkills: {
+      type: [String],
+      default: [],
     },
   },
   {
@@ -36,16 +57,15 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", function () {
-    if (!this.password ||!this.isModified("password")) {
-        return 
+    if (!this.password || !this.isModified("password")) {
+        return;
     }
-        return this.password = bcrypt.hashSync(this.password, 10)
-         
-})
+    return this.password = bcrypt.hashSync(this.password, 10);
+});
 
 userSchema.methods.comparePass = function (password) {
-    return bcrypt.compareSync(password, this.password)
-}
+    return bcrypt.compareSync(password, this.password);
+};
 
 const userModel = mongoose.model("User", userSchema);
 
