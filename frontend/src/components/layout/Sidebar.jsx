@@ -51,7 +51,7 @@ export const Sidebar = ({ degree }) => {
 
   return (
     <aside
-      className="w-64 bg-white min-h-screen flex flex-col justify-between p-4"
+      className="w-64 bg-white h-screen sticky top-0 flex flex-col justify-between p-4 overflow-y-auto shrink-0"
       style={{ borderRight: '1px solid #E7E8F5' }}
     >
       <div>
@@ -62,7 +62,7 @@ export const Sidebar = ({ degree }) => {
         >
           {/* Logo Container */}
           <div
-            className="w-10  rounded-xl overflow-hidden shrink-0 flex items-center justify-center"
+            className="w-10 rounded-xl overflow-hidden shrink-0 flex items-center justify-center"
             style={{ boxShadow: '0 2px 8px rgba(79,70,229,0.25)' }}
           >
             <img
@@ -82,7 +82,8 @@ export const Sidebar = ({ degree }) => {
               key={path}
               to={path}
               className={({ isActive }) =>
-                `relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors ${isActive ? 'font-semibold' : ''
+                `relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors ${
+                  isActive ? 'font-semibold' : ''
                 }`
               }
               style={({ isActive }) => ({

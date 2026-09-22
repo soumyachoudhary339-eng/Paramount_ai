@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchRoadmap, updateMilestoneStatus } from './roadmapSlice';
 import { SkillGapChart } from './components/SkillGapChart';
 import { MilestoneCard } from './components/MilestoneCard';
+import { AIRecommendedCard } from './components/AIRecommendedCard'; // <-- AI Card Import kiya
 
 const RoadmapSkeleton = () => (
   <div className="space-y-6 animate-pulse max-w-5xl mx-auto" aria-hidden="true">
@@ -131,8 +132,16 @@ export const RoadmapPage = () => {
         </div>
       </div>
 
-      {/* Skill Gap breakdown — SkillGapChart renders its own card shell and header */}
-      <SkillGapChart skills={roadmap.skillGap} />
+      {/* AI Recommended Actions Card Integration */}
+      <AIRecommendedCard suggestions={roadmap.suggestions} />
+
+      {/* Skill Gap breakdown */}
+      <div className="space-y-3">
+        <h2 className="text-sm font-bold px-1" style={{ color: '#1B1F3B' }}>
+          Skill Gaps & Proficiency
+        </h2>
+        <SkillGapChart skills={roadmap.skillGap} />
+      </div>
     </div>
   );
 };

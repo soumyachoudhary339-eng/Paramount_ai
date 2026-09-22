@@ -29,7 +29,7 @@ const getInitials = (label) => {
 };
 
 export const TopHeader = ({ user, activeRole }) => {
-  const { logout } = useAuth();
+  const { handleLogout, loading } = useAuth();
   const displayName = user?.name || user?.email || 'Student';
 
   return (
@@ -68,14 +68,23 @@ export const TopHeader = ({ user, activeRole }) => {
         </div>
 
         <button
-          onClick={logout}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition active:scale-[0.97] cursor-pointer"
-          style={{ color: '#E11D48', border: '1px solid #FBD1D9', background: 'transparent' }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = '#FEF2F2')}
-          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+          onClick={handleLogout}
+          disabled={loading}
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition active:scale-[0.97] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ml-2"
+          style={{
+            color: '#E11D48',
+            border: '1px solid #FBD1D9',
+            background: 'transparent',
+          }}
+          onMouseEnter={(e) => {
+            if (!loading) e.currentTarget.style.background = '#FEF2F2';
+          }}
+          onMouseLeave={(e) => {
+            if (!loading) e.currentTarget.style.background = 'transparent';
+          }}
         >
           <LogoutIcon />
-          Logout
+          {loading ? 'Logging out...' : 'Logout'}
         </button>
       </div>
     </header>

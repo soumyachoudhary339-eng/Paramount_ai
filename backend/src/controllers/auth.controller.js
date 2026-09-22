@@ -157,3 +157,37 @@ export const getMe = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 }
+
+
+
+// POST: /api/auth/logout
+export const logoutUser = async (req, res) => {
+    try {
+        // authMiddleware ki wajah se req.user available hai
+        const userId = req.user.id; 
+
+        // 1. Agar Database (Mongoose) me RefreshToken store kar rahe hain toh usse remove/null karein
+        await userModel.findByIdAndUpdate(userId, { refreshToken: null });
+
+        // 2. Browser ki Cookies clear karein
+        const cookieOptions = {
+            httpOnly: true,
+            secure: false, // Localhost ke liye false (Production me process.env.NODE_ENV === 'production')
+            sameSite: 'lax',
+        };
+
+        res.clearCookie('accessToken', cookieOptions);
+        res.clearCookie('refreshToken', cookieOptions);
+
+        return res.status(200).json({
+            success: true,
+            message: "Logged out successfully",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server error during logout",
+            error: error.message,
+        });
+    }
+};

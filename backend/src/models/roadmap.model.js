@@ -1,43 +1,28 @@
 import mongoose from 'mongoose';
 
-// Subdocument schema for individual milestone items
 const milestoneSchema = new mongoose.Schema({
-  title: String,
+  title: { type: String, required: true },
   description: String,
   status: {
     type: String,
-    enum: ['pending', 'in-progress', 'completed', 'Pending', 'In-Progress', 'Completed'],
+    enum: ['pending', 'in-progress', 'completed'],
     default: 'pending',
+    lowercase: true,
+    trim: true,
   },
   targetDate: String,
+  subTopics: { type: [String], default: [] },
+  skills: { type: [String], default: [] },
 });
 
-// Subdocument schema for skill gap data used by SkillGapChart
-const skillGapSchema = new mongoose.Schema(
+// Individual skill gap schema
+const roadmapSkillGapSchema = new mongoose.Schema(
   {
-    skillName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    currentScore: {
-      type: Number,
-      min: 0,
-      max: 100,
-      default: 0,
-    },
-    targetScore: {
-      type: Number,
-      min: 0,
-      max: 100,
-      default: 100,
-    },
-    baselineScore: { // <-- Yeh naya field add karein (Resume analyzer wala original score store karne ke liye)
-      type: Number,
-      min: 0,
-      max: 100,
-      default: 0,
-    },
+    skillName: { type: String, required: true, trim: true },
+    currentScore: { type: Number, min: 0, max: 100, default: 0 },
+    targetScore: { type: Number, min: 0, max: 100, default: 100 },
+    baselineScore: { type: Number, min: 0, max: 100, default: 0 },
+    suggestion: { type: String, default: '' }, // <--- Is line ko add karein agar per-skill suggestion chahiye
   },
   { _id: false }
 );
@@ -49,7 +34,7 @@ const roadmapSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
-      unique: true, // Guarantees 1 roadmap per user account
+      unique: true,
       index: true,
     },
     targetRole: {
@@ -57,20 +42,18 @@ const roadmapSchema = new mongoose.Schema(
       required: [true, 'Target role is required'],
       trim: true,
     },
-    atsScore: {
-      type: Number,
-      min: 0,
-      max: 100,
-      default: 0,
-    },
+    atsScore: { type: Number, min: 0, max: 100, default: 0 },
     milestones: [milestoneSchema],
-    skillGap: [skillGapSchema],
+    skillGap: [roadmapSkillGapSchema],
+    suggestions: {
+      type: [String],
+      default: [], // Main roadmap level overall suggestions array
+    },
   },
-  {
-    timestamps: true, // Automatically manages createdAt and updatedAt
-  }
+  { timestamps: true }
 );
 
-const RoadmapModel = mongoose.models.Roadmap || mongoose.model('Roadmap', roadmapSchema);
+const RoadmapModel =
+  mongoose.models.Roadmap || mongoose.model('Roadmap', roadmapSchema);
 
 export default RoadmapModel;

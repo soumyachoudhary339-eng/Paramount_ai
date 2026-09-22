@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { 
   registerFullAccount, 
-  loginUser, 
-  logoutUser 
+  loginUser,  
+  logoutAuth
 } from '../features/auth/authSlice';
 import { loginUserApi } from '../api/authService'; // Path confirm kar lein
 
@@ -33,8 +33,8 @@ export const useAuth = () => {
     }
   };
 
-  const logout = () => {
-    dispatch(logoutUser());
+  const handleLogout = async() => {
+    await dispatch(logoutAuth());
   };
 
   return {
@@ -44,6 +44,6 @@ export const useAuth = () => {
     loading, // 👈 Main Fix: Reload guard ke liye 'loading' pass kar rahe hain
     completeRegistration,
     handleLogin,
-    logout,
+    handleLogout,
   };
 };

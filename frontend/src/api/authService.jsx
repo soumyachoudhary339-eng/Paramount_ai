@@ -16,3 +16,8 @@ export const getCurrentUserApi = async () => {
   const response = await apiInstance.get('/auth/me');
   return response.data; // Yeh { success: true, user: {...} } return karega
 };
+
+export const logoutUserApi = async ()=>{
+    const response = await apiInstance.post("auth/logout",)
+    return response.data
+}
