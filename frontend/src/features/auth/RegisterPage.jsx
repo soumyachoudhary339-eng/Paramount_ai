@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { MOCK_CAREER_OPTIONS } from '../../data/mockCareerData';
 import { useAuth } from '../../hooks/useAuth';
 
- const RegisterPage = () => {
+const RegisterPage = () => {
   const navigate = useNavigate();
   const { completeRegistration } = useAuth();
   
@@ -32,19 +32,19 @@ import { useAuth } from '../../hooks/useAuth';
 
   // Fetch Career Options from Express Backend when moving to Step 2
   useEffect(() => {
-  if (step === 2) {
-    setLoadingOptions(true);
-    
-    // Express API simulation delay (500ms)
-    setTimeout(() => {
-      setCareerOptions(MOCK_CAREER_OPTIONS);
-      if (MOCK_CAREER_OPTIONS.length > 0) {
-        applyDegreeData(MOCK_CAREER_OPTIONS[0]);
-      }
-      setLoadingOptions(false);
-    }, 500);
-  }
-}, [step]);
+    if (step === 2) {
+      setLoadingOptions(true);
+      
+      // Express API simulation delay (500ms)
+      setTimeout(() => {
+        setCareerOptions(MOCK_CAREER_OPTIONS);
+        if (MOCK_CAREER_OPTIONS.length > 0) {
+          applyDegreeData(MOCK_CAREER_OPTIONS[0]);
+        }
+        setLoadingOptions(false);
+      }, 500);
+    }
+  }, [step]);
 
   // Handle Degree Change & Auto-Fill Dependent Fields
   const handleDegreeChange = (e) => {
@@ -121,11 +121,29 @@ import { useAuth } from '../../hooks/useAuth';
       {/* Left Hero Branding Panel */}
       <div className="md:w-1/2 bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-950 text-white flex flex-col justify-between p-8 md:p-12">
         <div>
-          <span className="bg-indigo-600/40 border border-indigo-400/30 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+          {/* Logo & Platform Header */}
+          <div className="flex items-center gap-2.5 mb-6">
+            <img 
+              src="/paramount_ai_logo.png" 
+              alt="Paramount AI Logo" 
+              className="w-9 h-9 object-contain shrink-0" 
+            />
+            <div className="flex flex-col">
+              <span className="text-xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-300">
+                PARAMOUNT AI
+              </span>
+              <span className="text-[10px] font-bold tracking-widest text-indigo-300 uppercase -mt-1">
+                Career Platform
+              </span>
+            </div>
+          </div>
+
+          <span className="bg-indigo-600/40 border border-indigo-400/30 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider inline-block">
             Step {step} of 2
           </span>
+          
           <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mt-6">
-            {step === 1 ? 'Create Student Account' : 'Define Your Career Destination'}
+            {step === 1 ? 'Create  Account' : 'Define Your Career Destination'}
           </h1>
           <p className="text-indigo-200 mt-3 text-sm max-w-md">
             {step === 1
@@ -136,7 +154,7 @@ import { useAuth } from '../../hooks/useAuth';
 
         <div className="pt-8 border-t border-indigo-700/50 text-xs text-indigo-300 flex justify-between">
           <span>Better Skills → Bigger Opportunities</span>
-          <span>CareerForger ✨</span>
+          <span>PARAMOUNT AI ✨</span>
         </div>
       </div>
 
@@ -381,4 +399,4 @@ import { useAuth } from '../../hooks/useAuth';
   );
 };
 
-export default RegisterPage
+export default RegisterPage;

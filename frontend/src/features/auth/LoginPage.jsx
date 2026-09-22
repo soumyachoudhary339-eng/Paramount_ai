@@ -1,16 +1,15 @@
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux'; // 👈 Step 1: Dispatch import karein
+import { useDispatch } from 'react-redux';
 import { loginUserApi } from '../../api/authService';
-import { loginUser } from '../auth/authSlice'; // 👈 Step 2: Redux action import karein
+import { loginUser } from '../auth/authSlice';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // 👈 Step 3: Hook initialize karein
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,16 +23,13 @@ const LoginPage = () => {
     try {
       const data = await loginUserApi(formData);
       console.log("Backend Response:", data); 
-      // Token ko safely extract karke localStorage mein save karein
+      
       const token = data.token || data.accessToken;
       if (token) {
         localStorage.setItem('token', token);
       }
 
-      // Poora 'data' object dispatch karein taaki user aur token dono Redux mein set ho jayein
       dispatch(loginUser(data));
-
-      // Dashboard par redirect karein
       navigate('/dashboard', { replace: true });
 
     } catch (err) {
@@ -49,9 +45,20 @@ const LoginPage = () => {
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900 p-12 flex-col justify-between text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(168,85,247,0.15),_transparent_50%)]"></div>
         
-        <div>
-          <span className="text-xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
-            AI Career Platform
+        {/* Logo Container Fix */}
+        <div className="flex flex-col z-10">
+          <div className="flex items-center gap-2">
+            <img 
+              src="/paramount_ai_logo.png" 
+              alt="Paramount AI Logo" 
+              className="w-9 h-9 object-contain shrink-0" 
+            />
+            <span className="text-xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-600">
+              PARAMOUNT AI
+            </span>
+          </div>
+          <span className="text-xs ml-10 font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 mt-0.5">
+            Career Platform
           </span>
         </div>
 
@@ -64,7 +71,7 @@ const LoginPage = () => {
           </p>
         </div>
 
-        <div className="text-xs text-purple-300 font-medium">
+        <div className="text-xs text-purple-300 font-medium z-10">
           Better Skills → Bigger Opportunities
         </div>
       </div>

@@ -1,11 +1,12 @@
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useSelector } from 'react-redux';
 
 export const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, user, loading } = useAuth();
+  // Redux store se values fetch karein
+  const { isAuthenticated, user, loading } = useSelector((state) => state.auth);
   const location = useLocation();
 
-  // 1. Loading State Check (Jab tak Auth state verify ho raha hai)
+  // 1. App Reload / Cookie Verify hone tak Spinner ruka rahega
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
@@ -17,16 +18,15 @@ export const ProtectedRoute = ({ children }) => {
     );
   }
 
-  // 2. Unauthenticated Check (Agar logged in nahi hai toh /login par redirect)
+  // 2. Cookie invalid milne par redirect to /login
   if (!isAuthenticated || !user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // 3. Profile Onboarding Check (Degree & Goal fill nahi kiya toh registration/onboarding step par wapas bhejo)
+  // 3. Onboarding Guard
   if (!user.hasCompletedOnboarding && location.pathname !== '/register') {
     return <Navigate to="/register" replace />;
   }
 
-  // Session verified & authorized -> Render protected component
   return children;
 };
